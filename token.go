@@ -327,10 +327,10 @@ func (t Token) buildClaims() (map[string]interface{}, error) {
 	}
 
 	claims["iat"] = t.IssuedAt.Unix()
-	if t.NotBefore.Before(t.IssuedAt) {
+	if !t.NotBefore.IsZero() {
 		claims["nbf"] = t.NotBefore.Unix()
 	}
-	if t.Expires.After(t.IssuedAt) {
+	if !t.Expires.IsZero() {
 		claims["exp"] = t.Expires.Unix()
 	}
 
