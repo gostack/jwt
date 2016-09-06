@@ -33,6 +33,7 @@ func NewToken() *Token {
 		Algorithm: HS256,
 		IssuedAt:  now,
 		NotBefore: now,
+		Expires:   now,
 		Claims:    make(map[string]interface{}),
 	}
 }
