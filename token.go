@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/gostack/clock"
 )
 
 // Token contains the data structure of a JWT.
@@ -26,7 +28,7 @@ type Token struct {
 // NewToken creates a new Token struct using the default HS256 algorithm.
 // IssuedAt is also initialized to the current UTC time.
 func NewToken() *Token {
-	now := time.Now().UTC()
+	now := clock.Now().UTC()
 
 	return &Token{
 		Type:      JWT,
@@ -282,7 +284,7 @@ func (t Token) Verify(issuer, subject, audience string) error {
 
 // Valid checks if the token is valid yet.
 func (t Token) Valid() bool {
-	return t.NotBefore.Before(time.Now().UTC())
+	return t.NotBefore.Before(clock.Now().UTC())
 }
 
 // Expired checks if the token has expired.
@@ -291,7 +293,7 @@ func (t Token) Expired() bool {
 		return false
 	}
 
-	return time.Now().UTC().After(t.Expires)
+	return clock.Now().UTC().After(t.Expires)
 }
 
 // buildHeader builds a new header map ready for signing.
