@@ -310,6 +310,9 @@ func (t Token) buildHeader() map[string]interface{} {
 func (t Token) buildClaims() (map[string]interface{}, error) {
 	claims := make(map[string]interface{})
 
+	if len(t.JWTID) > 0 {
+		claims["jti"] = t.JWTID
+	}
 	if len(t.Issuer) > 0 {
 		claims["iss"] = t.Issuer
 	}
