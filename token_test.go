@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/zhevron/jwt.v1/hmac"
+	"github.com/gostack/jwt/hmac"
 )
 
 func TestNewToken(t *testing.T) {

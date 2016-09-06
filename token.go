@@ -13,6 +13,7 @@ type Token struct {
 	Type      Type
 	Algorithm Algorithm
 	KeyID     string
+	JWTID     string
 	Issuer    string
 	Subject   string
 	Audience  string
@@ -31,7 +32,6 @@ func NewToken() *Token {
 		Type:      JWT,
 		Algorithm: HS256,
 		IssuedAt:  now,
-		Expires:   now,
 		NotBefore: now,
 		Claims:    make(map[string]interface{}),
 	}
@@ -148,6 +148,13 @@ func decodePayload(t *Token, s string) error {
 	payload := make(map[string]interface{})
 	if err := json.Unmarshal(b, &payload); err != nil {
 		return err
+	}
+
+	if v, ok := payload["jti"]; ok {
+		if _, ok := v.(string); !ok {
+			return ErrInvalidToken
+		}
+		t.JWTID = v.(string)
 	}
 
 	if v, ok := payload["iss"]; ok {

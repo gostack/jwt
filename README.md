@@ -3,7 +3,7 @@ jwt - JSON Web Token library
 
 [![Coverage Status](https://img.shields.io/coveralls/zhevron/jwt.svg)](https://coveralls.io/r/zhevron/jwt)
 [![Build Status](https://travis-ci.org/zhevron/jwt.svg?branch=master)](https://travis-ci.org/zhevron/jwt)
-[![GoDoc](https://godoc.org/gopkg.in/zhevron/jwt.v1?status.svg)](https://godoc.org/gopkg.in/zhevron/jwt.v1)
+[![GoDoc](https://godoc.org/github.com/gostack/jwt?status.svg)](https://godoc.org/github.com/gostack/jwt)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zhevron/jwt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 **jwt** is a simple library for handling [JSON Web Tokens](http://jwt.io/) in [Go](https://golang.org/).  
@@ -14,7 +14,7 @@ The library is developed based on [draft-ietf-oauth-json-web-token-32](https://t
 You can install the library using the standard `go get` command:
 
 ```
-go get gopkg.in/zhevron/jwt.v1
+go get github.com/gostack/jwt
 ```
 
 **Note:** This package requires Go 1.3 or higher.
@@ -26,7 +26,7 @@ go get gopkg.in/zhevron/jwt.v1
 import (
   "fmt"
 
-  "gopkg.in/zhevron/jwt.v1"
+  "github.com/gostack/jwt"
 )
 
 func main() {
@@ -54,7 +54,7 @@ func main() {
 import (
   "fmt"
 
-  "gopkg.in/zhevron/jwt.v1"
+  "github.com/gostack/jwt"
 )
 
 func main() {
@@ -88,7 +88,7 @@ mypublickeyhere
 import (
   "fmt"
 
-  "gopkg.in/zhevron/jwt.v1"
+  "github.com/gostack/jwt"
 )
 
 func main() {
