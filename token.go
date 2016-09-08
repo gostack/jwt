@@ -34,8 +34,6 @@ func NewToken() *Token {
 		Type:      JWT,
 		Algorithm: HS256,
 		IssuedAt:  now,
-		NotBefore: now,
-		Expires:   now,
 		Claims:    make(map[string]interface{}),
 	}
 }
@@ -104,7 +102,7 @@ func DecodeToken(token string, algorithm Algorithm, secret interface{}) (*Token,
 
 // decodeHeader attempts to decode the JWT header.
 func decodeHeader(t *Token, s string) error {
-	b, err := base64.URLEncoding.DecodeString(s)
+	b, err := base64.RawURLEncoding.DecodeString(s)
 	if err != nil {
 		return err
 	}
@@ -143,7 +141,7 @@ func decodeHeader(t *Token, s string) error {
 
 // decodePayload attempts to decode the JWT payload.
 func decodePayload(t *Token, s string) error {
-	b, err := base64.URLEncoding.DecodeString(s)
+	b, err := base64.RawURLEncoding.DecodeString(s)
 	if err != nil {
 		return err
 	}
@@ -232,8 +230,8 @@ func (t Token) Sign(secret interface{}) (string, error) {
 
 	tkn := fmt.Sprintf(
 		"%s.%s",
-		base64.URLEncoding.EncodeToString(header),
-		base64.URLEncoding.EncodeToString(payload),
+		base64.RawURLEncoding.EncodeToString(header),
+		base64.RawURLEncoding.EncodeToString(payload),
 	)
 
 	signature := ""
@@ -289,6 +287,10 @@ func (t Token) Valid() bool {
 
 // Expired checks if the token has expired.
 func (t Token) Expired() bool {
+	if t.Expires.IsZero() {
+		return false
+	}
+
 	if t.IssuedAt.Equal(t.Expires) {
 		return false
 	}

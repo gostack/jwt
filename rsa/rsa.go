@@ -89,7 +89,7 @@ func computeHash(tkn string, h crypto.Hash, k *rsa.PrivateKey) (string, error) {
 		return "", err
 	}
 
-	return base64.URLEncoding.EncodeToString(b), nil
+	return base64.RawURLEncoding.EncodeToString(b), nil
 }
 
 // verifySignature verifies the signature using the given algorithm.
@@ -97,7 +97,7 @@ func verifySignature(tkn, sig string, h crypto.Hash, k *rsa.PublicKey) error {
 	hash := h.New()
 	hash.Write([]byte(tkn))
 
-	b, err := base64.URLEncoding.DecodeString(sig)
+	b, err := base64.RawURLEncoding.DecodeString(sig)
 	if err != nil {
 		return err
 	}

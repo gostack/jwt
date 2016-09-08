@@ -75,7 +75,7 @@ func VerifyHS512(token, signature string, secret interface{}) error {
 // computeHash calculates the hash for a token using the provided algorithm.
 func computeHash(token string, h hash.Hash) (string, error) {
 	h.Write([]byte(token))
-	return base64.URLEncoding.EncodeToString(h.Sum(nil)), nil
+	return base64.RawURLEncoding.EncodeToString(h.Sum(nil)), nil
 }
 
 // checkSecret checks that the provided secret is a valid type.
