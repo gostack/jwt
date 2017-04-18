@@ -282,7 +282,7 @@ func (t Token) Verify(issuer, subject, audience string) error {
 
 // Valid checks if the token is valid yet.
 func (t Token) Valid() bool {
-	return !t.NotBefore.After(clock.Now().UTC())
+	return t.NotBefore.Before(clock.Now().UTC())
 }
 
 // Expired checks if the token has expired.
