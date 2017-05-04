@@ -282,8 +282,9 @@ func (t Token) Verify(issuer, subject, audience string, leeway time.Duration) er
 
 // Valid checks if the token is valid yet.
 func (t Token) Valid(leeway time.Duration) bool {
-	now := clock.Now().UTC().Add(leeway)
-	return now.After(t.NotBefore)
+	now := clock.Now().UTC()
+	nbf := t.NotBefore.Add(-leeway)
+	return nbf.Before(now)
 }
 
 // Expired checks if the token has expired.
@@ -296,8 +297,9 @@ func (t Token) Expired(leeway time.Duration) bool {
 		return false
 	}
 
-	now := clock.Now().UTC().Add(leeway)
-	return now.After(t.Expires)
+	now := clock.Now().UTC()
+	exp := t.Expires.Add(leeway)
+	return now.After(exp)
 }
 
 // buildHeader builds a new header map ready for signing.

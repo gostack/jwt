@@ -433,10 +433,10 @@ func TestTokenExpired_True(t *testing.T) {
 	}
 }
 
-func TestTokenExpired_LeewayTrue(t *testing.T) {
+func TestTokenExpired_LeewayFalse(t *testing.T) {
 	tkn := NewToken()
 	tkn.Expires = tkn.IssuedAt.Add(1 * time.Hour)
-	if !tkn.Expired(1 * time.Hour) {
+	if tkn.Expired(1 * time.Hour) {
 		t.Fatal("expected true, got false")
 	}
 }
