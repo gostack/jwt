@@ -282,8 +282,8 @@ func (t Token) Verify(issuer, subject, audience string, leeway time.Duration) er
 
 // Valid checks if the token is valid yet.
 func (t Token) Valid(leeway time.Duration) bool {
-	now := clock.Now().UTC().Add(-leeway)
-	return !t.NotBefore.After(now)
+	now := clock.Now().UTC().Add(leeway)
+	return now.After(t.NotBefore)
 }
 
 // Expired checks if the token has expired.

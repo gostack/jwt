@@ -409,6 +409,14 @@ func TestTokenValid_True(t *testing.T) {
 	}
 }
 
+func TestTokenValid_LeewayTrue(t *testing.T) {
+	tkn := NewToken()
+	tkn.NotBefore = tkn.IssuedAt.Add(1 * time.Hour)
+	if !tkn.Valid(1 * time.Hour) {
+		t.Fatal("expected true, got false")
+	}
+}
+
 func TestTokenValid_False(t *testing.T) {
 	tkn := NewToken()
 	tkn.NotBefore = tkn.IssuedAt.Add(1 * time.Hour)
@@ -421,6 +429,14 @@ func TestTokenExpired_True(t *testing.T) {
 	tkn := NewToken()
 	tkn.Expires = tkn.IssuedAt.Add(-1 * time.Hour)
 	if !tkn.Expired(0) {
+		t.Fatal("expected true, got false")
+	}
+}
+
+func TestTokenExpired_LeewayTrue(t *testing.T) {
+	tkn := NewToken()
+	tkn.Expires = tkn.IssuedAt.Add(1 * time.Hour)
+	if !tkn.Expired(1 * time.Hour) {
 		t.Fatal("expected true, got false")
 	}
 }
