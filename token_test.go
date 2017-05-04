@@ -356,7 +356,7 @@ func TestTokenSign_UnsupportedAlgorithm(t *testing.T) {
 
 func TestTokenVerify(t *testing.T) {
 	tkn := NewToken()
-	if err := tkn.Verify("", "", ""); err != nil {
+	if err := tkn.Verify("", "", "", 0); err != nil {
 		t.Fatalf("expected nil, got %#q", err)
 	}
 }
@@ -364,7 +364,7 @@ func TestTokenVerify(t *testing.T) {
 func TestTokenVerify_InvalidIssuer(t *testing.T) {
 	tkn := NewToken()
 	tkn.Issuer = "MyIssuer"
-	if err := tkn.Verify("TestIssuer", "", ""); err != ErrInvalidIssuer {
+	if err := tkn.Verify("TestIssuer", "", "", 0); err != ErrInvalidIssuer {
 		t.Fatalf("expected %#q, got %#q", ErrInvalidIssuer, err)
 	}
 }
@@ -372,7 +372,7 @@ func TestTokenVerify_InvalidIssuer(t *testing.T) {
 func TestTokenVerify_InvalidSubject(t *testing.T) {
 	tkn := NewToken()
 	tkn.Subject = "MySubject"
-	if err := tkn.Verify("", "TestSubject", ""); err != ErrInvalidSubject {
+	if err := tkn.Verify("", "TestSubject", "", 0); err != ErrInvalidSubject {
 		t.Fatalf("expected %#q, got %#q", ErrInvalidSubject, err)
 	}
 }
@@ -380,7 +380,7 @@ func TestTokenVerify_InvalidSubject(t *testing.T) {
 func TestTokenVerify_InvalidAudience(t *testing.T) {
 	tkn := NewToken()
 	tkn.Audience = "MyAudience"
-	if err := tkn.Verify("", "", "TestAudience"); err != ErrInvalidAudience {
+	if err := tkn.Verify("", "", "TestAudience", 0); err != ErrInvalidAudience {
 		t.Fatalf("expected %#q, got %#q", ErrInvalidAudience, err)
 	}
 }
@@ -388,7 +388,7 @@ func TestTokenVerify_InvalidAudience(t *testing.T) {
 func TestTokenVerify_NotValidYet(t *testing.T) {
 	tkn := NewToken()
 	tkn.NotBefore = tkn.IssuedAt.Add(1 * time.Hour)
-	if err := tkn.Verify("", "", ""); err != ErrTokenNotValidYet {
+	if err := tkn.Verify("", "", "", 0); err != ErrTokenNotValidYet {
 		t.Fatalf("expected %#q, got %#q", ErrTokenNotValidYet, err)
 	}
 }
@@ -396,7 +396,7 @@ func TestTokenVerify_NotValidYet(t *testing.T) {
 func TestTokenVerify_Expired(t *testing.T) {
 	tkn := NewToken()
 	tkn.Expires = tkn.IssuedAt.Add(-1 * time.Hour)
-	if err := tkn.Verify("", "", ""); err != ErrTokenExpired {
+	if err := tkn.Verify("", "", "", 0); err != ErrTokenExpired {
 		t.Fatalf("expected %#q, got %#q", ErrTokenExpired, err)
 	}
 }
@@ -404,7 +404,7 @@ func TestTokenVerify_Expired(t *testing.T) {
 func TestTokenValid_True(t *testing.T) {
 	tkn := NewToken()
 	tkn.NotBefore = tkn.IssuedAt.Add(-1 * time.Hour)
-	if !tkn.Valid() {
+	if !tkn.Valid(0) {
 		t.Fatal("expected true, got false")
 	}
 }
@@ -412,7 +412,7 @@ func TestTokenValid_True(t *testing.T) {
 func TestTokenValid_False(t *testing.T) {
 	tkn := NewToken()
 	tkn.NotBefore = tkn.IssuedAt.Add(1 * time.Hour)
-	if tkn.Valid() {
+	if tkn.Valid(0) {
 		t.Fatal("expected false, got true")
 	}
 }
@@ -420,7 +420,7 @@ func TestTokenValid_False(t *testing.T) {
 func TestTokenExpired_True(t *testing.T) {
 	tkn := NewToken()
 	tkn.Expires = tkn.IssuedAt.Add(-1 * time.Hour)
-	if !tkn.Expired() {
+	if !tkn.Expired(0) {
 		t.Fatal("expected true, got false")
 	}
 }
@@ -428,7 +428,7 @@ func TestTokenExpired_True(t *testing.T) {
 func TestTokenExpired_False(t *testing.T) {
 	tkn := NewToken()
 	tkn.Expires = tkn.IssuedAt.Add(1 * time.Hour)
-	if tkn.Expired() {
+	if tkn.Expired(0) {
 		t.Fatal("expected false, got true")
 	}
 }

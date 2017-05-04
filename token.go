@@ -256,7 +256,7 @@ func (t Token) Sign(secret interface{}) (string, error) {
 // Verify attempts to verify the token using the provided issuer, subject and
 // audience. If either provided value is left empty, the value is skipped.
 // Validity and expiration will also be checked.
-func (t Token) Verify(issuer, subject, audience string) error {
+func (t Token) Verify(issuer, subject, audience string, leeway time.Duration) error {
 	if len(issuer) > 0 && issuer != t.Issuer {
 		return ErrInvalidIssuer
 	}
@@ -269,11 +269,11 @@ func (t Token) Verify(issuer, subject, audience string) error {
 		return ErrInvalidAudience
 	}
 
-	if !t.Valid() {
+	if !t.Valid(leeway) {
 		return ErrTokenNotValidYet
 	}
 
-	if t.Expired() {
+	if t.Expired(leeway) {
 		return ErrTokenExpired
 	}
 
@@ -281,12 +281,13 @@ func (t Token) Verify(issuer, subject, audience string) error {
 }
 
 // Valid checks if the token is valid yet.
-func (t Token) Valid() bool {
-	return !t.NotBefore.After(clock.Now().UTC())
+func (t Token) Valid(leeway time.Duration) bool {
+	now := clock.Now().UTC().Add(-leeway)
+	return !t.NotBefore.After(now)
 }
 
 // Expired checks if the token has expired.
-func (t Token) Expired() bool {
+func (t Token) Expired(leeway time.Duration) bool {
 	if t.Expires.IsZero() {
 		return false
 	}
@@ -295,7 +296,8 @@ func (t Token) Expired() bool {
 		return false
 	}
 
-	return clock.Now().UTC().After(t.Expires)
+	now := clock.Now().UTC().Add(leeway)
+	return now.After(t.Expires)
 }
 
 // buildHeader builds a new header map ready for signing.

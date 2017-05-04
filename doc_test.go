@@ -11,7 +11,7 @@ func ExampleToken_decode() {
 		panic(err)
 	}
 
-	if err := token.Verify("MyIssuer", "", ""); err != nil {
+	if err := token.Verify("MyIssuer", "", "", 0); err != nil {
 		panic(err)
 	}
 
@@ -37,7 +37,7 @@ func ExampleToken_kid() {
 		panic(err)
 	}
 
-	if err := token.Verify("MyIssuer", "", ""); err != nil {
+	if err := token.Verify("MyIssuer", "", "", 0); err != nil {
 		panic(err)
 	}
 
